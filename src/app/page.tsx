@@ -1,25 +1,7 @@
 "use client";
 
-import { useState, Suspense, useCallback, useEffect } from "react";
-import dynamic from "next/dynamic";
-import { LiquidType } from "@/types/liquid";
-import Controls from "@/components/Controls/Controls";
-import InfoPanel from "@/components/UI/InfoPanel";
 import Link from "next/link";
-
-// Import the CapillaryScene component with dynamic loading and SSR disabled
-// This prevents issues with Three.js when the component is server-rendered
-const CapillaryScene = dynamic(
-  () => import("@/components/CapillaryTube/CapillaryScene"),
-  {
-    ssr: false,
-    loading: () => (
-      <div className="w-full h-[500px] rounded-lg overflow-hidden shadow-lg flex items-center justify-center bg-gray-100 dark:bg-gray-700">
-        <p className="text-gray-600 dark:text-gray-300">Loading 3D scene...</p>
-      </div>
-    ),
-  }
-);
+import Image from "next/image";
 
 interface SimulationCard {
   title: string;
@@ -52,7 +34,7 @@ export default function HomePage() {
       description:
         "Explore how waves propagate through different mediums. Adjust parameters like amplitude, frequency, and damping to see how they affect wave behavior.",
       href: "/simulations/wave-propagation",
-      image: "/images/wave-thumbnail.png",
+      // image: "/images/wave-thumbnail.png",
       tags: ["Waves", "Physics", "Three.js"],
     },
     // Add more simulations here as they are developed
@@ -79,12 +61,14 @@ export default function HomePage() {
               href={sim.href}
               className="bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300"
             >
-              <div className="h-48 bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
+              <div className="h-48 bg-gray-200 dark:bg-gray-700 flex items-center justify-center relative">
                 {sim.image ? (
-                  <img
+                  <Image
                     src={sim.image}
                     alt={`${sim.title} simulation thumbnail`}
-                    className="w-full h-full object-cover"
+                    className="object-cover"
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   />
                 ) : (
                   <div className="text-gray-400 dark:text-gray-500 text-2xl font-bold">

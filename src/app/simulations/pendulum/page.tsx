@@ -52,7 +52,7 @@ export default function PendulumPage() {
           </h1>
           <p className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
             Explore the physics of pendulum motion. Adjust parameters like
-            length, mass, and gravity to see how they affect the pendulum's
+            length, mass, and gravity to see how they affect the pendulum&apos;s
             behavior.
           </p>
         </div>
@@ -118,10 +118,10 @@ export default function PendulumPage() {
               (at the lowest point).
             </p>
             <p>
-              For small oscillations, a pendulum's motion approximates simple
-              harmonic motion. This means its period (time for one complete
-              swing) is independent of the amplitude, which is why pendulums
-              were so useful for timekeeping.
+              For small oscillations, a pendulum&apos;s motion approximates
+              simple harmonic motion. This means its period (time for one
+              complete swing) is independent of the amplitude, which is why
+              pendulums were so useful for timekeeping.
             </p>
           </div>
         </div>

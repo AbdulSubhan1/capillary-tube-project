@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useMemo, useEffect } from "react";
+import React, { useRef, useMemo, useEffect, useCallback } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import {
   OrbitControls,
@@ -33,34 +33,37 @@ function Pendulum({
   });
 
   // Update the string position and rotation
-  const updateStringPosition = (angle: number) => {
-    if (stringRef.current) {
-      // Position the string at half its length (as a pivot point)
-      const pivotPoint = new THREE.Vector3(0, 0, 0);
-      const bobPosition = new THREE.Vector3(
-        Math.sin(angle) * length,
-        -Math.cos(angle) * length,
-        0
-      );
+  const updateStringPosition = useCallback(
+    (angle: number) => {
+      if (stringRef.current) {
+        // Position the string at half its length (as a pivot point)
+        const pivotPoint = new THREE.Vector3(0, 0, 0);
+        const bobPosition = new THREE.Vector3(
+          Math.sin(angle) * length,
+          -Math.cos(angle) * length,
+          0
+        );
 
-      // Calculate the midpoint between pivot and bob for string position
-      const midPoint = new THREE.Vector3()
-        .addVectors(pivotPoint, bobPosition)
-        .multiplyScalar(0.5);
+        // Calculate the midpoint between pivot and bob for string position
+        const midPoint = new THREE.Vector3()
+          .addVectors(pivotPoint, bobPosition)
+          .multiplyScalar(0.5);
 
-      // Set string position to midpoint
-      stringRef.current.position.copy(midPoint);
+        // Set string position to midpoint
+        stringRef.current.position.copy(midPoint);
 
-      // Calculate the angle for the string (pointing from pivot to bob)
-      const angleToVertical = Math.atan2(
-        bobPosition.x - pivotPoint.x,
-        bobPosition.y - pivotPoint.y
-      );
+        // Calculate the angle for the string (pointing from pivot to bob)
+        const angleToVertical = Math.atan2(
+          bobPosition.x - pivotPoint.x,
+          bobPosition.y - pivotPoint.y
+        );
 
-      // Rotate the string to align with the pendulum angle
-      stringRef.current.rotation.z = angleToVertical;
-    }
-  };
+        // Rotate the string to align with the pendulum angle
+        stringRef.current.rotation.z = angleToVertical;
+      }
+    },
+    [length]
+  );
 
   // Physics update for the pendulum
   useFrame((_, delta) => {
@@ -103,7 +106,7 @@ function Pendulum({
       angularAcceleration: 0,
       lastTime: 0,
     };
-  }, [initialAngle, length]);
+  }, [initialAngle, length, updateStringPosition]);
 
   // Scale the bob size based on mass
   const bobSize = useMemo(() => {

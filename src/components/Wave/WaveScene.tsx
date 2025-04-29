@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useMemo, useEffect } from "react";
+import React, { useRef, useMemo } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import {
   OrbitControls,
@@ -17,19 +17,9 @@ function WaveMesh({ settings }: { settings: WaveSettings }) {
   const timeRef = useRef<number>(0);
 
   // Generate the wave geometry based on settings
-  const { geometry, initialPositions } = useMemo(() => {
+  const geometry = useMemo(() => {
     // Create a plane geometry for the wave surface
-    const geo = new THREE.PlaneGeometry(
-      10,
-      10,
-      settings.points,
-      settings.points
-    );
-
-    // Store the initial positions for animation
-    const positions = geo.attributes.position.array.slice();
-
-    return { geometry: geo, initialPositions: positions };
+    return new THREE.PlaneGeometry(10, 10, settings.points, settings.points);
   }, [settings.points]);
 
   // Update the wave animation

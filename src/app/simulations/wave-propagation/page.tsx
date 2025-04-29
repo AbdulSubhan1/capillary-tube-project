@@ -112,8 +112,8 @@ export default function WavePropagationPage() {
             <p>
               The wave equation, a fundamental equation in physics, describes
               how waves propagate. For simple harmonic waves, like those in this
-              simulation, the equation relates the wave's amplitude, frequency,
-              wavelength, and the speed of propagation in the medium.
+              simulation, the equation relates the wave&apos;s amplitude,
+              frequency, wavelength, and the speed of propagation in the medium.
             </p>
           </div>
         </div>
