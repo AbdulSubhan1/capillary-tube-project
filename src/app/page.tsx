@@ -47,6 +47,14 @@ export default function HomePage() {
       image: "/images/pendulum-thumbnail.png",
       tags: ["Mechanics", "Oscillation", "Three.js"],
     },
+    {
+      title: "Wave Propagation",
+      description:
+        "Explore how waves propagate through different mediums. Adjust parameters like amplitude, frequency, and damping to see how they affect wave behavior.",
+      href: "/simulations/wave-propagation",
+      image: "/images/wave-thumbnail.png",
+      tags: ["Waves", "Physics", "Three.js"],
+    },
     // Add more simulations here as they are developed
   ];
 

@@ -12,6 +12,10 @@ Explore how different liquids behave in a glass capillary tube. Adjust the liqui
 
 Visualize the motion of simple pendulums. Adjust parameters like length, mass, initial angle, and gravity to see how they affect the pendulum's behavior.
 
+### Wave Propagation Simulation
+
+Explore how waves propagate through different mediums (water, air, string, metal). Adjust parameters like amplitude, frequency, and damping to see how they affect wave behavior.
+
 ## 🚀 Live Demo
 
 <!-- Update with your actual deployment URL when available -->

@@ -28,6 +28,11 @@ export default function Navigation() {
       href: "/simulations/pendulum",
       description: "Simple and compound pendulum motion simulation",
     },
+    {
+      name: "Wave Propagation",
+      href: "/simulations/wave-propagation",
+      description: "Wave propagation through different mediums",
+    },
     // More simulations can be added here
   ];
 
