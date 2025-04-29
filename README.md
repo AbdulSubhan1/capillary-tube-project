@@ -1,36 +1,95 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Capillary Tube Simulation
 
-## Getting Started
+<!-- Add a screenshot of your simulation here -->
+<!-- ![Capillary Tube Simulation](public/screenshot.png) -->
 
-First, run the development server:
+An interactive 3D simulation demonstrating capillary action in glass tubes with different liquids. This educational tool allows users to explore how meniscus formation and capillary rise vary based on liquid properties.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 🔍 Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **Interactive 3D Visualization**: Built with Three.js for realistic fluid dynamics representation
+- **Multiple Liquid Types**: Choose between water, mercury, alcohol, and more to observe different behaviors
+- **Adjustable Fill Levels**: Control the amount of liquid in the tube
+- **Real-time Interaction**: Rotate, zoom, and pan the 3D model to examine from different angles
+- **Educational Information**: Learn about the physical properties of different liquids and how they affect capillary action
+- **Responsive Design**: Works on both desktop and mobile devices
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🚀 Live Demo
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+<!-- Update with your actual deployment URL when available -->
+<!-- Visit the [live demo](https://your-deployment-url.vercel.app) to try the simulation without installation. -->
 
-## Learn More
+## 🛠️ Technologies Used
 
-To learn more about Next.js, take a look at the following resources:
+- **Next.js 15**: React framework with app router for frontend
+- **React 19**: UI component library
+- **Three.js**: 3D graphics library for web browsers
+- **React Three Fiber**: React renderer for Three.js
+- **Drei**: Useful helpers for React Three Fiber
+- **TypeScript**: Type-safe JavaScript
+- **Tailwind CSS**: Utility-first CSS framework
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 📋 Prerequisites
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Node.js 18.17.0 or later
+- Yarn or npm package manager
 
-## Deploy on Vercel
+## ⚙️ Installation
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. Clone the repository:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+   ```bash
+   git clone https://github.com/your-username/capillary-tube-project.git
+   cd capillary-tube-project
+   ```
+
+2. Install dependencies:
+
+   ```bash
+   yarn install
+   # or
+   npm install
+   ```
+
+3. Start the development server:
+
+   ```bash
+   yarn dev
+   # or
+   npm run dev
+   ```
+
+4. Open [http://localhost:3000](http://localhost:3000) in your browser to see the simulation.
+
+## 🧪 How It Works
+
+The simulation demonstrates capillary action - the ability of a liquid to flow in narrow spaces without the assistance of, or even in opposition to, external forces like gravity.
+
+- **Concave Meniscus**: Liquids like water form a concave meniscus (curves upward at the edges) due to adhesive forces between the liquid and the glass being stronger than the cohesive forces within the liquid.
+- **Convex Meniscus**: Liquids like mercury form a convex meniscus (curves downward at the edges) because the cohesive forces within the liquid are stronger than the adhesive forces with the glass.
+
+The simulation allows you to explore these behaviors by changing liquid types and observing the differences in meniscus formation and capillary rise.
+
+## 🤝 Contributing
+
+Contributions are welcome! Feel free to submit issues or pull requests.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📝 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 👨‍💻 Author
+
+<!-- Update with your actual information -->
+
+- Your Name - [GitHub Profile](https://github.com/your-username)
+
+---
+
+Created with ❤️ using Next.js, TypeScript, and Three.js
