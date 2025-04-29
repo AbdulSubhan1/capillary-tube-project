@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import dynamic from "next/dynamic";
 import { LiquidType } from "@/types/liquid";
 import Controls from "@/components/Controls/Controls";
@@ -10,7 +10,14 @@ import InfoPanel from "@/components/UI/InfoPanel";
 // This prevents issues with Three.js when the component is server-rendered
 const CapillaryScene = dynamic(
   () => import("@/components/CapillaryTube/CapillaryScene"),
-  { ssr: false }
+  {
+    ssr: false,
+    loading: () => (
+      <div className="w-full h-[500px] rounded-lg overflow-hidden shadow-lg flex items-center justify-center bg-gray-100 dark:bg-gray-700">
+        <p className="text-gray-600 dark:text-gray-300">Loading 3D scene...</p>
+      </div>
+    ),
+  }
 );
 
 export default function Home() {
@@ -56,12 +63,22 @@ export default function Home() {
 
           {/* 3D Simulation - main content area, spans 2 columns on large screens */}
           <div className="lg:col-span-2">
-            <CapillaryScene
-              liquidType={liquidType}
-              fillLevel={fillLevel}
-              tubeHeight={5}
-              tubeRadius={0.2}
-            />
+            <Suspense
+              fallback={
+                <div className="w-full h-[500px] rounded-lg overflow-hidden shadow-lg flex items-center justify-center bg-gray-100 dark:bg-gray-700">
+                  <p className="text-gray-600 dark:text-gray-300">
+                    Loading 3D scene...
+                  </p>
+                </div>
+              }
+            >
+              <CapillaryScene
+                liquidType={liquidType}
+                fillLevel={fillLevel}
+                tubeHeight={5}
+                tubeRadius={0.2}
+              />
+            </Suspense>
 
             <div className="bg-white dark:bg-gray-800 mt-4 p-4 rounded-lg shadow-md text-sm text-gray-600 dark:text-gray-300">
               <p className="font-medium mb-2">Interaction tips:</p>

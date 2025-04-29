@@ -79,56 +79,72 @@ export default function CapillaryTube({
 
   // Add subtle animation to simulate liquid movement
   useFrame((state, delta) => {
-    if (liquidRef.current && meniscusRef.current) {
-      // Add subtle oscillation to simulate liquid surface tension
-      const time = state.clock.getElapsedTime();
-      const oscillation =
-        (Math.sin(time * 2) * 0.0015) / liquidProperties.viscosity;
+    try {
+      if (liquidRef.current && meniscusRef.current) {
+        // Add subtle oscillation to simulate liquid surface tension
+        const time = state.clock.getElapsedTime();
+        const oscillation =
+          (Math.sin(time * 2) * 0.0015) / liquidProperties.viscosity;
 
-      // Apply oscillation to the liquid height
-      liquidRef.current.position.y =
-        -tubeHeight / 2 + liquidHeight / 2 + oscillation;
+        // Apply oscillation to the liquid height
+        liquidRef.current.position.y =
+          -tubeHeight / 2 + liquidHeight / 2 + oscillation;
 
-      // Apply oscillation to the meniscus position
-      meniscusRef.current.position.y =
-        -tubeHeight / 2 + liquidHeight + oscillation;
+        // Apply oscillation to the meniscus position
+        meniscusRef.current.position.y =
+          -tubeHeight / 2 + liquidHeight + oscillation;
+      }
+    } catch (error) {
+      console.error("Error in animation frame:", error);
     }
   });
 
   // Create meniscus shape
   const meniscusGeometry = useMemo(() => {
-    const mShape = new THREE.Shape();
-    const radius = tubeRadius * 0.95; // Slightly smaller than tube radius
-    const segments = 64;
-    const meniscusHeight = liquidProperties.meniscusHeight;
+    try {
+      const mShape = new THREE.Shape();
+      const radius = tubeRadius * 0.95; // Slightly smaller than tube radius
+      const segments = 64;
+      const meniscusHeight = liquidProperties.meniscusHeight;
 
-    if (liquidProperties.meniscusType === "concave") {
-      // Create concave meniscus (higher at edges)
-      mShape.moveTo(-radius, 0);
-      for (let i = 0; i <= segments; i++) {
-        const angle = Math.PI * (i / segments);
-        const x = -radius + 2 * radius * (i / segments);
-        const y = meniscusHeight * Math.sin(angle);
-        mShape.lineTo(x, y);
+      if (liquidProperties.meniscusType === "concave") {
+        // Create concave meniscus (higher at edges)
+        mShape.moveTo(-radius, 0);
+        for (let i = 0; i <= segments; i++) {
+          const angle = Math.PI * (i / segments);
+          const x = -radius + 2 * radius * (i / segments);
+          const y = meniscusHeight * Math.sin(angle);
+          mShape.lineTo(x, y);
+        }
+      } else {
+        // Create convex meniscus (higher in middle)
+        mShape.moveTo(-radius, 0);
+        for (let i = 0; i <= segments; i++) {
+          const angle = Math.PI * (i / segments);
+          const x = -radius + 2 * radius * (i / segments);
+          const y = meniscusHeight * (1 - Math.sin(angle));
+          mShape.lineTo(x, y);
+        }
       }
-    } else {
-      // Create convex meniscus (higher in middle)
-      mShape.moveTo(-radius, 0);
-      for (let i = 0; i <= segments; i++) {
-        const angle = Math.PI * (i / segments);
-        const x = -radius + 2 * radius * (i / segments);
-        const y = meniscusHeight * (1 - Math.sin(angle));
-        mShape.lineTo(x, y);
-      }
+
+      const extrudeSettings = {
+        steps: 1,
+        depth: 0.001,
+        bevelEnabled: false,
+      };
+
+      return new THREE.ExtrudeGeometry(mShape, extrudeSettings);
+    } catch (error) {
+      console.error("Error creating meniscus geometry:", error);
+      // Return a simple flat geometry as fallback
+      const shape = new THREE.Shape();
+      shape.moveTo(-tubeRadius, 0);
+      shape.lineTo(tubeRadius, 0);
+      return new THREE.ExtrudeGeometry(shape, {
+        depth: 0.001,
+        bevelEnabled: false,
+      });
     }
-
-    const extrudeSettings = {
-      steps: 1,
-      depth: 0.001,
-      bevelEnabled: false,
-    };
-
-    return new THREE.ExtrudeGeometry(mShape, extrudeSettings);
   }, [liquidProperties, tubeRadius]);
 
   return (
