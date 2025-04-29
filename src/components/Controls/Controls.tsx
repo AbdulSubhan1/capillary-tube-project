@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { LiquidType, LIQUID_DATA } from "@/types/liquid";
 
 interface ControlsProps {
@@ -16,6 +16,25 @@ export default function Controls({
   onLiquidTypeChange,
   onFillLevelChange,
 }: ControlsProps) {
+  // Local state to track slider value during dragging
+  const [sliderValue, setSliderValue] = useState(fillLevel);
+
+  // Update local state when props change (in case it's updated elsewhere)
+  useEffect(() => {
+    setSliderValue(fillLevel);
+  }, [fillLevel]);
+
+  // Handle slider changes
+  const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = parseFloat(e.target.value);
+    setSliderValue(newValue);
+
+    // Debounce the update slightly to avoid too many renders during dragging
+    requestAnimationFrame(() => {
+      onFillLevelChange(newValue);
+    });
+  };
+
   return (
     <div className="w-full bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-8">
       <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-white">
@@ -59,7 +78,7 @@ export default function Controls({
               Fill Level
             </label>
             <span className="text-sm text-gray-500 dark:text-gray-400">
-              {Math.round(fillLevel * 100)}%
+              {Math.round(sliderValue * 100)}%
             </span>
           </div>
 
@@ -69,14 +88,42 @@ export default function Controls({
             min="0"
             max="1"
             step="0.01"
-            value={fillLevel}
-            onChange={(e) => onFillLevelChange(parseFloat(e.target.value))}
+            value={sliderValue}
+            onChange={handleSliderChange}
             className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer"
           />
 
           <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-1">
             <span>Empty</span>
             <span>Full</span>
+          </div>
+
+          {/* Quick fill buttons */}
+          <div className="flex gap-2 mt-3">
+            <button
+              onClick={() => onFillLevelChange(0.25)}
+              className="text-xs px-2 py-1 bg-gray-200 dark:bg-gray-700 rounded hover:bg-gray-300 dark:hover:bg-gray-600"
+            >
+              25%
+            </button>
+            <button
+              onClick={() => onFillLevelChange(0.5)}
+              className="text-xs px-2 py-1 bg-gray-200 dark:bg-gray-700 rounded hover:bg-gray-300 dark:hover:bg-gray-600"
+            >
+              50%
+            </button>
+            <button
+              onClick={() => onFillLevelChange(0.75)}
+              className="text-xs px-2 py-1 bg-gray-200 dark:bg-gray-700 rounded hover:bg-gray-300 dark:hover:bg-gray-600"
+            >
+              75%
+            </button>
+            <button
+              onClick={() => onFillLevelChange(1.0)}
+              className="text-xs px-2 py-1 bg-gray-200 dark:bg-gray-700 rounded hover:bg-gray-300 dark:hover:bg-gray-600"
+            >
+              100%
+            </button>
           </div>
         </div>
       </div>

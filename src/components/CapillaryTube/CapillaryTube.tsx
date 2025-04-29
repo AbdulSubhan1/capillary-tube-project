@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useMemo } from "react";
+import React, { useRef, useMemo, useEffect } from "react";
 import { useFrame } from "@react-three/fiber";
 import { Cylinder, useTexture } from "@react-three/drei";
 import * as THREE from "three";
@@ -72,15 +72,53 @@ export default function CapillaryTube({
     return properties;
   }, [liquidType]);
 
-  // Calculate the height of the liquid
+  // Calculate the height of the liquid - properly calculate based on fill level
   const liquidHeight = useMemo(() => {
     return tubeHeight * fillLevel;
   }, [tubeHeight, fillLevel]);
 
+  console.log("Liquid height calculation:", {
+    tubeHeight,
+    fillLevel,
+    liquidHeight,
+  });
+
+  // Log when liquid height changes
+  useEffect(() => {
+    console.log("Liquid height updated:", {
+      fillLevel,
+      liquidHeight,
+      liquidType,
+    });
+
+    // Force immediate update of mesh positions
+    if (liquidRef.current && meniscusRef.current) {
+      liquidRef.current.position.y = -tubeHeight / 2 + liquidHeight / 2;
+      meniscusRef.current.position.y = -tubeHeight / 2 + liquidHeight;
+    }
+  }, [fillLevel, liquidHeight, liquidType, tubeHeight]);
+
+  // Also update the geometry when fill level changes
+  useEffect(() => {
+    if (liquidRef.current) {
+      // Update the cylinder geometry with new height
+      const oldGeometry = liquidRef.current.geometry;
+      const newGeometry = new THREE.CylinderGeometry(
+        tubeRadius * 0.95,
+        tubeRadius * 0.95,
+        liquidHeight,
+        32
+      );
+
+      liquidRef.current.geometry.dispose();
+      liquidRef.current.geometry = newGeometry;
+    }
+  }, [liquidHeight, tubeRadius]);
+
   // Add subtle animation to simulate liquid movement
   useFrame((state, delta) => {
     try {
-      if (liquidRef.current && meniscusRef.current) {
+      if (liquidRef.current && meniscusRef.current && fillLevel > 0) {
         // Add subtle oscillation to simulate liquid surface tension
         const time = state.clock.getElapsedTime();
         const oscillation =
@@ -157,14 +195,15 @@ export default function CapillaryTube({
       >
         <meshPhysicalMaterial
           color="#ffffff"
-          transparent
-          transmission={0.95}
+          transparent={true}
+          transmission={0.92}
           roughness={0.05}
           clearcoat={1}
           clearcoatRoughness={0.1}
           ior={1.5}
-          thickness={0.2}
+          thickness={0.05}
           side={THREE.DoubleSide}
+          depthWrite={false} // Important for proper transparency
         />
       </Cylinder>
 
@@ -175,7 +214,7 @@ export default function CapillaryTube({
       >
         <meshPhysicalMaterial
           color="#ffffff"
-          transparent
+          transparent={true}
           opacity={0.3}
           roughness={0.05}
           clearcoat={1}
@@ -190,7 +229,7 @@ export default function CapillaryTube({
       >
         <meshPhysicalMaterial
           color="#ffffff"
-          transparent
+          transparent={true}
           opacity={0.3}
           roughness={0.05}
           clearcoat={1}
@@ -199,7 +238,7 @@ export default function CapillaryTube({
         />
       </Cylinder>
 
-      {/* Liquid */}
+      {/* Liquid - render with higher opacity and proper intensity */}
       {fillLevel > 0 && (
         <Cylinder
           ref={liquidRef}
@@ -208,9 +247,11 @@ export default function CapillaryTube({
         >
           <meshStandardMaterial
             color={liquidProperties.color}
-            transparent
-            opacity={liquidProperties.opacity}
+            transparent={true}
+            opacity={liquidProperties.opacity + 0.2} // Increase opacity slightly
             roughness={0.1}
+            emissive={liquidProperties.color} // Add subtle emission for better visibility
+            emissiveIntensity={0.15}
           />
         </Cylinder>
       )}
@@ -225,10 +266,12 @@ export default function CapillaryTube({
         >
           <meshStandardMaterial
             color={liquidProperties.color}
-            transparent
-            opacity={liquidProperties.opacity}
+            transparent={true}
+            opacity={liquidProperties.opacity + 0.2} // Match the opacity increase
             roughness={0.1}
             side={THREE.DoubleSide}
+            emissive={liquidProperties.color}
+            emissiveIntensity={0.15}
           />
         </mesh>
       )}

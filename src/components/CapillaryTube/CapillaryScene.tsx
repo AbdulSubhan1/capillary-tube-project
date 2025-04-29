@@ -8,6 +8,11 @@ import {
   PerspectiveCamera,
   ContactShadows,
   useHelper,
+  useGLTF,
+  BakeShadows,
+  AccumulativeShadows,
+  RandomizedLight,
+  Preload,
 } from "@react-three/drei";
 import * as THREE from "three";
 import CapillaryTube from "./CapillaryTube";
@@ -82,6 +87,47 @@ function SceneDebugger() {
   return null;
 }
 
+// Enhanced scene lighting setup
+function SceneLighting() {
+  return (
+    <>
+      {/* Base ambient light */}
+      <ambientLight intensity={0.6} />
+
+      {/* Main key light - positioned to show liquid */}
+      <spotLight
+        position={[5, 5, 5]}
+        angle={0.25}
+        penumbra={1}
+        intensity={1.5}
+        castShadow
+        shadow-mapSize={[2048, 2048]}
+      />
+
+      {/* Fill light from opposite side */}
+      <spotLight
+        position={[-5, 3, -5]}
+        angle={0.3}
+        penumbra={1}
+        intensity={0.8}
+        castShadow
+      />
+
+      {/* Rim light to highlight edges */}
+      <pointLight position={[0, 5, -5]} intensity={0.5} color="#b3e5fc" />
+
+      {/* Bottom light to illuminate liquid from below */}
+      <pointLight
+        position={[0, -5, 0]}
+        intensity={0.3}
+        color="#ffffff"
+        distance={10}
+        decay={2}
+      />
+    </>
+  );
+}
+
 export default function CapillaryScene({
   liquidType,
   fillLevel,
@@ -106,7 +152,18 @@ export default function CapillaryScene({
       <ErrorBoundary>
         <Canvas
           dpr={[1, 2]}
-          onCreated={() => {
+          gl={{
+            antialias: true,
+            alpha: true,
+            preserveDrawingBuffer: true,
+            powerPreference: "high-performance",
+          }}
+          shadows
+          onCreated={({ gl }) => {
+            gl.toneMapping = THREE.ACESFilmicToneMapping;
+            gl.toneMappingExposure = 1.2;
+            // Using newer encoding API for THREE.js
+            gl.outputColorSpace = THREE.SRGBColorSpace;
             console.log("Canvas created successfully");
             setIsRendererInitialized(true);
           }}
@@ -114,29 +171,20 @@ export default function CapillaryScene({
           <SceneDebugger />
 
           {/* Camera */}
-          <PerspectiveCamera makeDefault position={[2, 0, 5]} fov={40} />
+          <PerspectiveCamera
+            makeDefault
+            position={[2.5, 0, 5]}
+            fov={35}
+            near={0.1}
+            far={100}
+          />
 
-          {/* Lighting */}
-          <ambientLight intensity={0.8} />
-          <spotLight
-            position={[10, 10, 5]}
-            angle={0.15}
-            penumbra={1}
-            intensity={1.5}
-            castShadow
-            shadow-mapSize={[2048, 2048]}
-          />
-          <spotLight
-            position={[-10, -10, -5]}
-            angle={0.3}
-            penumbra={1}
-            intensity={0.8}
-            castShadow
-          />
+          {/* Enhanced lighting */}
+          <SceneLighting />
 
           {/* Environment for realistic reflections */}
           <Suspense fallback={null}>
-            <Environment preset="city" />
+            <Environment preset="city" background={false} />
           </Suspense>
 
           {/* Ground shadow */}
@@ -144,7 +192,7 @@ export default function CapillaryScene({
             position={[0, -tubeHeight / 2 - 0.1, 0]}
             opacity={0.5}
             scale={10}
-            blur={1}
+            blur={1.5}
             far={10}
             resolution={256}
             color="#000000"
@@ -167,10 +215,17 @@ export default function CapillaryScene({
             maxPolarAngle={Math.PI - Math.PI / 6}
             minDistance={3}
             maxDistance={8}
+            target={[0, 0, 0]}
           />
 
           {/* Helpers for positioning (visible only during development) */}
           <SceneHelpers visible={false} tubeHeight={tubeHeight} />
+
+          {/* Preload assets */}
+          <Preload all />
+
+          {/* Bake shadows for better performance */}
+          <BakeShadows />
         </Canvas>
       </ErrorBoundary>
 

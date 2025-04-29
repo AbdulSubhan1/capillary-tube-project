@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, Suspense } from "react";
+import { useState, Suspense, useCallback, useEffect } from "react";
 import dynamic from "next/dynamic";
 import { LiquidType } from "@/types/liquid";
 import Controls from "@/components/Controls/Controls";
@@ -24,15 +24,28 @@ export default function Home() {
   // State for the simulation
   const [liquidType, setLiquidType] = useState<LiquidType>("water");
   const [fillLevel, setFillLevel] = useState(0.6);
+  const [key, setKey] = useState(Date.now()); // Force re-render key
 
-  // Handler functions
-  const handleLiquidTypeChange = (newType: LiquidType) => {
+  // Log state changes to help with debugging
+  useEffect(() => {
+    console.log("Main component state updated:", { liquidType, fillLevel });
+  }, [liquidType, fillLevel]);
+
+  // Handler functions with useCallback to maintain reference stability
+  const handleLiquidTypeChange = useCallback((newType: LiquidType) => {
+    console.log("Liquid type changing to:", newType);
     setLiquidType(newType);
-  };
+  }, []);
 
-  const handleFillLevelChange = (newLevel: number) => {
+  const handleFillLevelChange = useCallback((newLevel: number) => {
+    console.log("Fill level changing to:", newLevel);
     setFillLevel(newLevel);
-  };
+
+    // If the newLevel is 0, force re-render to ensure proper reset
+    if (newLevel === 0) {
+      setKey(Date.now());
+    }
+  }, []);
 
   return (
     <div className="min-h-screen p-8 pb-20 sm:p-8 font-sans bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
@@ -73,6 +86,7 @@ export default function Home() {
               }
             >
               <CapillaryScene
+                key={key} // Force re-render when key changes
                 liquidType={liquidType}
                 fillLevel={fillLevel}
                 tubeHeight={5}
