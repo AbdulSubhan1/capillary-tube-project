@@ -2,7 +2,7 @@
 
 import React, { useRef, useMemo, useEffect } from "react";
 import { useFrame } from "@react-three/fiber";
-import { Cylinder, useTexture } from "@react-three/drei";
+import { Cylinder } from "@react-three/drei";
 import * as THREE from "three";
 import { LiquidType } from "@/types/liquid";
 
@@ -102,7 +102,6 @@ export default function CapillaryTube({
   useEffect(() => {
     if (liquidRef.current) {
       // Update the cylinder geometry with new height
-      const oldGeometry = liquidRef.current.geometry;
       const newGeometry = new THREE.CylinderGeometry(
         tubeRadius * 0.95,
         tubeRadius * 0.95,
@@ -116,7 +115,7 @@ export default function CapillaryTube({
   }, [liquidHeight, tubeRadius]);
 
   // Add subtle animation to simulate liquid movement
-  useFrame((state, delta) => {
+  useFrame((state) => {
     try {
       if (liquidRef.current && meniscusRef.current && fillLevel > 0) {
         // Add subtle oscillation to simulate liquid surface tension

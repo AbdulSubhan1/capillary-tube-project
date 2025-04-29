@@ -5,7 +5,17 @@ import { OrbitControls } from "@react-three/drei";
 import { useRef, useState } from "react";
 import * as THREE from "three";
 
-function Box(props: any) {
+// Define an interface for the Box props
+interface BoxProps {
+  position: [number, number, number];
+  // Replace [key: string]: any with more specific optional props
+  onClick?: () => void;
+  onPointerOver?: () => void;
+  onPointerOut?: () => void;
+  scale?: number | [number, number, number];
+}
+
+function Box(props: BoxProps) {
   // This reference gives us direct access to the mesh
   const meshRef = useRef<THREE.Mesh>(null!);
 
@@ -18,7 +28,7 @@ function Box(props: any) {
 
   return (
     <mesh
-      {...props}
+      position={props.position}
       ref={meshRef}
       scale={active ? 1.5 : 1}
       onClick={() => setActive(!active)}

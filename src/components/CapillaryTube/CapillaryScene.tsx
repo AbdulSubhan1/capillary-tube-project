@@ -7,11 +7,7 @@ import {
   Environment,
   PerspectiveCamera,
   ContactShadows,
-  useHelper,
-  useGLTF,
   BakeShadows,
-  AccumulativeShadows,
-  RandomizedLight,
   Preload,
 } from "@react-three/drei";
 import * as THREE from "three";
