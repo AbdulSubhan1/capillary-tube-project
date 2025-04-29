@@ -131,8 +131,8 @@ function SceneLighting() {
 export default function CapillaryScene({
   liquidType,
   fillLevel,
-  tubeHeight = 5,
-  tubeRadius = 0.2,
+  tubeHeight = 3,
+  tubeRadius = 0.15,
 }: CapillarySceneProps) {
   // Add a state for renderer initialization
   const [isRendererInitialized, setIsRendererInitialized] = useState(false);
@@ -167,13 +167,14 @@ export default function CapillaryScene({
             console.log("Canvas created successfully");
             setIsRendererInitialized(true);
           }}
+          camera={{ position: [2, 0, 4], fov: 35 }}
         >
           <SceneDebugger />
 
-          {/* Camera */}
+          {/* Camera - updated position for better framing of the smaller tube */}
           <PerspectiveCamera
             makeDefault
-            position={[2.5, 0, 5]}
+            position={[1.8, 0, 3.8]}
             fov={35}
             near={0.1}
             far={100}
@@ -187,13 +188,13 @@ export default function CapillaryScene({
             <Environment preset="city" background={false} />
           </Suspense>
 
-          {/* Ground shadow */}
+          {/* Ground shadow - adjusted position for smaller tube */}
           <ContactShadows
-            position={[0, -tubeHeight / 2 - 0.1, 0]}
-            opacity={0.5}
-            scale={10}
+            position={[0, -tubeHeight / 2 - 0.05, 0]}
+            opacity={0.6}
+            scale={8}
             blur={1.5}
-            far={10}
+            far={8}
             resolution={256}
             color="#000000"
           />
@@ -206,16 +207,19 @@ export default function CapillaryScene({
             tubeRadius={tubeRadius}
           />
 
-          {/* Controls */}
+          {/* Controls - adjusted for better interaction with the smaller tube */}
           <OrbitControls
             makeDefault
             enableDamping
-            dampingFactor={0.05}
+            dampingFactor={0.07}
             minPolarAngle={Math.PI / 6}
             maxPolarAngle={Math.PI - Math.PI / 6}
-            minDistance={3}
-            maxDistance={8}
+            minDistance={2.5}
+            maxDistance={7}
             target={[0, 0, 0]}
+            enablePan={true}
+            panSpeed={0.5}
+            rotateSpeed={0.7}
           />
 
           {/* Helpers for positioning (visible only during development) */}
@@ -240,8 +244,8 @@ export default function CapillaryScene({
   );
 }
 
-// Helper component with grid and axes
-function SceneHelpers({ visible = false, tubeHeight = 5 }) {
+// Helper component with grid and axes - adjusted to match the smaller tube size
+function SceneHelpers({ visible = false, tubeHeight = 3 }) {
   const gridRef = useRef<THREE.GridHelper>(null!);
   const axesRef = useRef<THREE.AxesHelper>(null!);
 
@@ -251,10 +255,10 @@ function SceneHelpers({ visible = false, tubeHeight = 5 }) {
     <>
       <gridHelper
         ref={gridRef}
-        args={[10, 10, "#666666", "#222222"]}
-        position={[0, -tubeHeight / 2 - 0.1, 0]}
+        args={[8, 8, "#666666", "#222222"]}
+        position={[0, -tubeHeight / 2 - 0.05, 0]}
       />
-      <axesHelper ref={axesRef} args={[5]} />
+      <axesHelper ref={axesRef} args={[3]} />
     </>
   );
 }

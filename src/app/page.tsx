@@ -89,8 +89,8 @@ export default function Home() {
                 key={key} // Force re-render when key changes
                 liquidType={liquidType}
                 fillLevel={fillLevel}
-                tubeHeight={5}
-                tubeRadius={0.2}
+                tubeHeight={3}
+                tubeRadius={0.15}
               />
             </Suspense>
 
