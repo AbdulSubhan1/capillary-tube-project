@@ -1,23 +1,21 @@
-# Capillary Tube Simulation
+# Physics Simulations Collection
 
-<!-- Add a screenshot of your simulation here -->
-<!-- ![Capillary Tube Simulation](public/screenshot.png) -->
+An interactive collection of 3D physics simulations built using Next.js, Three.js, and React. This educational toolkit allows users to explore various physics phenomena through interactive visualizations.
 
-An interactive 3D simulation demonstrating capillary action in glass tubes with different liquids. This educational tool allows users to explore how meniscus formation and capillary rise vary based on liquid properties.
+## 🔍 Available Simulations
 
-## 🔍 Features
+### Capillary Tube Simulation
 
-- **Interactive 3D Visualization**: Built with Three.js for realistic fluid dynamics representation
-- **Multiple Liquid Types**: Choose between water, mercury, alcohol, and more to observe different behaviors
-- **Adjustable Fill Levels**: Control the amount of liquid in the tube
-- **Real-time Interaction**: Rotate, zoom, and pan the 3D model to examine from different angles
-- **Educational Information**: Learn about the physical properties of different liquids and how they affect capillary action
-- **Responsive Design**: Works on both desktop and mobile devices
+Explore how different liquids behave in a glass capillary tube. Adjust the liquid type and fill level to see changes in meniscus formation and capillary action.
+
+### Pendulum Motion Simulation
+
+Visualize the motion of simple pendulums. Adjust parameters like length, mass, initial angle, and gravity to see how they affect the pendulum's behavior.
 
 ## 🚀 Live Demo
 
 <!-- Update with your actual deployment URL when available -->
-<!-- Visit the [live demo](https://your-deployment-url.vercel.app) to try the simulation without installation. -->
+<!-- Visit the [live demo](https://your-deployment-url.vercel.app) to try the simulations without installation. -->
 
 ## 🛠️ Technologies Used
 
@@ -59,25 +57,44 @@ An interactive 3D simulation demonstrating capillary action in glass tubes with 
    npm run dev
    ```
 
-4. Open [http://localhost:3000](http://localhost:3000) in your browser to see the simulation.
+4. Open [http://localhost:3000](http://localhost:3000) in your browser to see the simulations.
 
-## 🧪 How It Works
+## 🏗️ Project Structure
 
-The simulation demonstrates capillary action - the ability of a liquid to flow in narrow spaces without the assistance of, or even in opposition to, external forces like gravity.
+```
+src/
+├── app/                      # Next.js app router
+│   ├── page.tsx              # Homepage
+│   ├── layout.tsx            # Root layout
+│   └── simulations/          # Simulation routes
+│       ├── capillary-tube/   # Capillary tube simulation
+│       └── pendulum/         # Pendulum simulation
+├── components/               # React components
+│   ├── CapillaryTube/        # Components for capillary tube simulation
+│   ├── Pendulum/             # Components for pendulum simulation
+│   ├── Controls/             # Shared control components
+│   └── UI/                   # Shared UI components like Navigation
+└── types/                    # TypeScript type definitions
+```
 
-- **Concave Meniscus**: Liquids like water form a concave meniscus (curves upward at the edges) due to adhesive forces between the liquid and the glass being stronger than the cohesive forces within the liquid.
-- **Convex Meniscus**: Liquids like mercury form a convex meniscus (curves downward at the edges) because the cohesive forces within the liquid are stronger than the adhesive forces with the glass.
+## 🧪 Adding New Simulations
 
-The simulation allows you to explore these behaviors by changing liquid types and observing the differences in meniscus formation and capillary rise.
+To add a new simulation:
+
+1. Create a new directory in `src/app/simulations/` for your simulation
+2. Add the required components in `src/components/`
+3. Define types in `src/types/` as needed
+4. Add the simulation to the navigation in `src/components/UI/Navigation.tsx`
+5. Add the simulation card on the homepage in `src/app/page.tsx`
 
 ## 🤝 Contributing
 
 Contributions are welcome! Feel free to submit issues or pull requests.
 
 1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
+2. Create your feature branch (`git checkout -b feature/new-simulation`)
+3. Commit your changes (`git commit -m 'Add new wave simulation'`)
+4. Push to the branch (`git push origin feature/new-simulation`)
 5. Open a Pull Request
 
 ## 📝 License

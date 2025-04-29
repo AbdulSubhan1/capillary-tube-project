@@ -1,6 +1,7 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import Navigation from "@/components/UI/Navigation";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -13,9 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Capillary Tube Simulation",
-  description:
-    "Interactive 3D simulation of capillary tubes with different liquids",
+  title: "Physics Simulations",
+  description: "Interactive 3D simulations of various physics phenomena",
   icons: {
     icon: "/favicon.ico",
   },
@@ -29,8 +29,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800`}
       >
+        <Navigation />
         {children}
       </body>
     </html>
